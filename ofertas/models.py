@@ -3,8 +3,8 @@ from django.db import models
 class Produto(models.Model):
     nome = models.CharField(max_length=255)
     preco = models.DecimalField(max_digits=10, decimal_places=2)
-    imagem = models.URLField()
-    link = models.URLField()
+    imagem = models.URLField(max_length=500)
+    link = models.URLField(max_length=1000)
     parcelamento = models.CharField(max_length=100, blank=True, null=True)
     preco_sem_desconto = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     percentual_desconto = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)

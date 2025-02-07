@@ -9,6 +9,11 @@ Este projeto é um catálogo de ofertas de produtos obtidos via web scraping no 
 - **Docker** para facilitar a execução
 - **Gunicorn** como servidor WSGI para produção
 
+### Deploy
+O projeto está disponível no Render: [desafio-catalogo-ofertas.onrender.com](https://desafio-catalogo-ofertas.onrender.com).
+
+A funcionalidade de atualização de ofertas (web scraping) está desativada, pois o Render possui restrições que impedem a execução do Selenium. Porém, o deploy funciona com um JSON com as informações dos produtos de uma raspagem anterior
+
 ## Executando o Projeto
 
 ### Com Docker

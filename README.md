@@ -34,6 +34,7 @@ Este projeto é um catálogo de ofertas de produtos obtidos via web scraping no 
 
 4. Aplique as migrações do banco de dados:
    ```sh
+   docker-compose exec web python manage.py makemigrations
    docker-compose exec web python manage.py migrate
    ```
 
@@ -68,6 +69,7 @@ Este projeto é um catálogo de ofertas de produtos obtidos via web scraping no 
 
 5. Aplique as migrações do banco de dados:
    ```sh
+   python manage.py makemigrations
    python manage.py migrate
    ```
 

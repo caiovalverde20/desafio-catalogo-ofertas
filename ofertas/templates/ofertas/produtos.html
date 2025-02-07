@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Ofertas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .produto {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #fff;
+        }
+        .produto img {
+            width: 120px;
+            height: auto;
+            margin-right: 20px;
+            border-radius: 8px;
+        }
+        .produto-info {
+            flex: 1;
+        }
+        .produto-info h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+        }
+        .produto-info p {
+            margin: 5px 0;
+            color: #555;
+        }
+        .produto-info a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .produto-info a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Catálogo de Ofertas</h1>
+        <div>
+            {% for produto in produtos %}
+            <div class="produto">
+                <img src="{{ produto.imagem }}" alt="{{ produto.nome }}">
+                <div class="produto-info">
+                    <h3>{{ produto.nome }}</h3>
+                    <p><strong>Preço:</strong> R$ {{ produto.preco }}</p>
+                    <a href="{{ produto.link }}" target="_blank">Ver Produto</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

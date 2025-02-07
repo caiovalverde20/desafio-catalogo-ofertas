@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from .scraper import buscar_ofertas
 from .models import Produto
+from django.shortcuts import render
 
 def atualizar_produtos(request):
     try:
@@ -21,3 +22,7 @@ def listar_produtos(request):
         for produto in produtos
     ]
     return JsonResponse({"produtos": produtos_serializados})
+
+def exibir_produtos(request):
+    produtos = Produto.objects.all()
+    return render(request, "ofertas/produtos.html", {"produtos": produtos})

@@ -84,6 +84,11 @@ def buscar_ofertas():
                 except:
                     preco_sem_desconto = None
 
+                if preco and preco_sem_desconto and preco_sem_desconto > preco:
+                    percentual_desconto = round(((preco_sem_desconto - preco) / preco_sem_desconto) * 100, 2)
+                else:
+                    percentual_desconto = None
+
                 try:
                     produto.find_element(By.XPATH, './/span[contains(@class, "poly-component__shipped-from")]')
                     tipo_entrega = "full"
@@ -106,6 +111,7 @@ def buscar_ofertas():
                     "link": link,
                     "parcelamento": parcelamento,
                     "preco_sem_desconto": preco_sem_desconto,
+                    "percentual_desconto": percentual_desconto,
                     "tipo_entrega": tipo_entrega,
                     "frete_gratis": frete_gratis
                 })

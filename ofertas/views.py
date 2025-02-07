@@ -20,6 +20,7 @@ def listar_produtos(request):
             "link": produto.link,
             "parcelamento": produto.parcelamento,
             "preco_sem_desconto": produto.preco_sem_desconto,
+            "percentual_desconto": produto.percentual_desconto,
             "tipo_entrega": produto.tipo_entrega,
             "frete_gratis": produto.frete_gratis,
         }

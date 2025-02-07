@@ -42,4 +42,17 @@ def listar_maior_desconto(request):
 
 def exibir_produtos(request):
     produtos = Produto.objects.all()
-    return render(request, "ofertas/produtos.html", {"produtos": produtos})
+
+    produto_maior_preco = produtos.order_by('-preco').first()
+    produto_menor_preco = produtos.order_by('preco').first()
+
+    produtos_com_desconto = produtos.exclude(percentual_desconto__isnull=True).exclude(percentual_desconto=0)
+
+    produto_maior_desconto = produtos_com_desconto.order_by('-percentual_desconto').first()
+
+    return render(request, "ofertas/produtos.html", {
+        "produtos": produtos,
+        "produto_maior_preco": produto_maior_preco,
+        "produto_menor_preco": produto_menor_preco,
+        "produto_maior_desconto": produto_maior_desconto
+    })

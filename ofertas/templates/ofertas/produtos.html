@@ -19,28 +19,76 @@
             background: #fff;
             margin-bottom: 15px;
             padding: 10px;
-            transition: transform 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            min-height: 200px; /* Garante altura fixa para todos os produtos */
         }
         .produto:hover {
             transform: scale(1.02);
         }
         .produto img {
             width: 120px;
-            height: auto;
+            height: 120px;
+            object-fit: contain;
             margin-right: 20px;
             border-radius: 8px;
         }
+        .produto-info {
+            flex-grow: 1;
+            max-width: calc(100% - 140px);
+        }
         .produto-info h3 {
-            font-size: 18px;
+            font-size: 16px;
             margin-bottom: 5px;
             color: #333;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        .produto-info p {
+            margin-bottom: 5px;
+            font-size: 14px;
         }
         .produto-info a {
+            display: block;
+            width: fit-content;
             color: #007bff;
             text-decoration: none;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
         }
         .produto-info a:hover {
             text-decoration: underline;
+        }
+        .highlight {
+            border: 2px solid #ff9800;
+            box-shadow: 0px 0px 10px rgba(255, 152, 0, 0.5);
+            transition: all 0.5s ease-in-out;
+        }
+        .badge-top {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #ff9800;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .top-maior-preco {
+            background: #f39c12;
+        }
+        .top-menor-preco {
+            background: #2ecc71;
+        }
+        .top-maior-desconto {
+            background: #e74c3c;
         }
     </style>
 </head>
@@ -65,30 +113,47 @@
         </div>
     </div>
 
-    <div id="produtos-lista">
+    <div class="d-flex justify-content-center mb-3">
+        <button class="btn btn-warning ordenacao" data-tipo="maior-preco">💰 Maior Preço</button>
+        <button class="btn btn-success ordenacao mx-2" data-tipo="menor-preco">💸 Menor Preço</button>
+        <button class="btn btn-danger ordenacao" data-tipo="maior-desconto">🔥 Maior Desconto</button>
+    </div>
+
+    <div class="row" id="produtos-lista">
         {% for produto in produtos %}
-        <div class="produto">
-            <img src="{{ produto.imagem }}" alt="{{ produto.nome }}">
-            <div class="produto-info">
-                <h3>{{ produto.nome }}</h3>
-                <p><strong>Preço:</strong> R$ {{ produto.preco }}</p>
+        <div class="col-md-6">
+            <div class="produto" id="produto-{{ forloop.counter }}" data-preco="{{ produto.preco }}" data-desconto="{{ produto.percentual_desconto }}">
                 
-                {% if produto.preco_sem_desconto %}
-                    <p>
-                        <del>De: R$ {{ produto.preco_sem_desconto }}</del> 
-                        ({{ produto.percentual_desconto }}% off)
-                    </p>
+                {% if produto == produto_maior_preco %}
+                    <span class="badge-top top-maior-preco">💰 Maior Preço</span>
+                {% elif produto == produto_menor_preco %}
+                    <span class="badge-top top-menor-preco">💸 Menor Preço</span>
+                {% elif produto.percentual_desconto and produto == produto_maior_desconto %}
+                    <span class="badge-top top-maior-desconto">🔥 Maior Desconto</span>
                 {% endif %}
 
-                {% if produto.frete_gratis %}
-                    <p class="text-success">Frete Grátis</p>
-                {% endif %}
+                <img src="{{ produto.imagem }}" alt="{{ produto.nome }}">
+                <div class="produto-info">
+                    <h3>{{ produto.nome }}</h3>
+                    <p><strong>Preço:</strong> R$ {{ produto.preco }}</p>
 
-                {% if produto.tipo_entrega == "full" %}
-                    <p class="text-info">Entrega Full</p>
-                {% endif %}
+                    {% if produto.preco_sem_desconto %}
+                        <p>
+                            <del>De: R$ {{ produto.preco_sem_desconto }}</del> 
+                            ({{ produto.percentual_desconto }}% off)
+                        </p>
+                    {% endif %}
 
-                <a href="{{ produto.link }}" target="_blank" class="btn btn-sm btn-outline-primary">Ver Produto</a>
+                    {% if produto.frete_gratis %}
+                        <p class="text-success">Frete Grátis</p>
+                    {% endif %}
+
+                    {% if produto.tipo_entrega == "full" %}
+                        <p class="text-info">Entrega Full</p>
+                    {% endif %}
+
+                    <a href="{{ produto.link }}" target="_blank">Ver Produto</a>
+                </div>
             </div>
         </div>
         {% endfor %}
@@ -125,22 +190,28 @@
         });
 
         $(".ordenacao").click(function() {
-            let criterio = $(this).attr("data-ordem");
-            let produtos = $(".produto").get();
+            let tipo = $(this).data("tipo");
+            let targetId = "";
 
-            produtos.sort(function(a, b) {
-                let precoA = parseFloat($(a).find(".preco").text().replace("R$ ", "").replace(",", ".")) || 0;
-                let precoB = parseFloat($(b).find(".preco").text().replace("R$ ", "").replace(",", ".")) || 0;
+            if (tipo === "maior-preco") {
+                targetId = $(".top-maior-preco").closest(".produto").attr("id");
+            } else if (tipo === "menor-preco") {
+                targetId = $(".top-menor-preco").closest(".produto").attr("id");
+            } else if (tipo === "maior-desconto") {
+                targetId = $(".top-maior-desconto").closest(".produto").attr("id");
+            }
 
-                if (criterio === "maior-preco") return precoB - precoA;
-                if (criterio === "menor-preco") return precoA - precoB;
+            if (targetId) {
+                $("html, body").animate({
+                    scrollTop: $("#" + targetId).offset().top - 100
+                }, 800);
 
-                let descontoA = parseFloat($(a).find(".desconto").text().replace("%", "")) || 0;
-                let descontoB = parseFloat($(b).find(".desconto").text().replace("%", "")) || 0;
-                return descontoB - descontoA;
-            });
+                $("#" + targetId).addClass("highlight");
 
-            $("#produtos-lista").html(produtos);
+                setTimeout(() => {
+                    $("#" + targetId).removeClass("highlight");
+                }, 1500);
+            }
         });
     });
 </script>

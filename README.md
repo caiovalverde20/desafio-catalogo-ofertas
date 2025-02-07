@@ -14,7 +14,7 @@ Este projeto é um catálogo de ofertas de produtos obtidos via web scraping no 
 ### Com Docker
 1. Clone este repositório:
    ```sh
-   git clone https://github.com/seu-usuario/desafio-catalogo-ofertas.git
+   git clone https://github.com/caiovalverde20/desafio-catalogo-ofertas.git
    cd desafio-catalogo-ofertas
    ```
 
@@ -87,5 +87,5 @@ Na interface há um **botão de atualização** que vai executar o scraping e sa
 | Rota | Descrição |
 |------|-------------|
 | `/` | Exibe os produtos disponíveis |
-| `/atualizar/` | Realiza o web scraping e atualiza o banco | essa rota é chamada no botão de atualização na pagina principal
+| `/atualizar/` | Realiza o web scraping e atualiza o banco (utilizada no botão na pagina principal) |
 | `/listar/` | Lista todos os produtos em JSON |

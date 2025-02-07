@@ -18,6 +18,10 @@ def listar_produtos(request):
             "preco": produto.preco,
             "imagem": produto.imagem,
             "link": produto.link,
+            "parcelamento": produto.parcelamento,
+            "preco_sem_desconto": produto.preco_sem_desconto,
+            "tipo_entrega": produto.tipo_entrega,
+            "frete_gratis": produto.frete_gratis,
         }
         for produto in produtos
     ]

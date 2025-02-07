@@ -32,6 +32,10 @@ def listar_maior_preco(request):
     produtos = Produto.objects.order_by('-preco')
     return render(request, "ofertas/produtos.html", {"produtos": produtos})
 
+def listar_menor_preco(request):
+    produtos = Produto.objects.order_by('preco')
+    return render(request, "ofertas/produtos.html", {"produtos": produtos})
+
 def exibir_produtos(request):
     produtos = Produto.objects.all()
     return render(request, "ofertas/produtos.html", {"produtos": produtos})
